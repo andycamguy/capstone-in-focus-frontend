@@ -1,14 +1,15 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-//import axios from 'axios';
-import Header from './headercomp';
+import Header from '../components/Header';
+import CameraBody from '../components/CameraBody'; // You'll create this component
 
-import Bodycomp from './body';
+const Home = () => {
+  return (
+    <div>
+      <Header />
+      <CameraBody />
+      {/* Other components and content */}
+    </div>
+  );
+};
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-  <Header></Header>
-  <Bodycomp></Bodycomp>
-  </React.StrictMode>
-);
+export default Home;
