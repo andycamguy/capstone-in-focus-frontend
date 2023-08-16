@@ -1,9 +1,5 @@
 import React from 'react';
 import { Container, Row, Col, Form, FormGroup } from 'react-bootstrap';
-import { Slider } from 'primereact/slider';
-import 'primereact/resources/themes/saga-blue/theme.css';
-import 'primereact/resources/primereact.min.css';
-import 'primeicons/primeicons.css';
 
 const CameraBody = () => {
   return (
@@ -15,11 +11,11 @@ const CameraBody = () => {
               <Form>
                 <FormGroup>
                   <Form.Label className="text-light">ISO</Form.Label>
-                  <Slider className="p-mb-3" />
+                  <Form.Control type="range" />
                 </FormGroup>
                 <FormGroup>
                   <Form.Label className="text-light">Shutter Speed</Form.Label>
-                  <Slider className="p-mb-3" />
+                  <Form.Control type="range" />
                 </FormGroup>
               </Form>
             </div>
