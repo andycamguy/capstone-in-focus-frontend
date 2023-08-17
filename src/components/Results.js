@@ -4,28 +4,26 @@ const Results = ({ objectDistance, iso, shutterSpeedDenominator, aperture }) => 
   let calculatedAperture = aperture;
   let calculatedIso = iso;
   let calculatedObjectDistance = objectDistance;
+  let bgColor = 'bg-green'; // Default to green background
 
-  if (!calculatedAperture && iso && shutterSpeedDenominator && objectDistance) {
-    const shutterSpeedDecimal = 1 / shutterSpeedDenominator;
-    calculatedAperture = Math.sqrt((iso * shutterSpeedDecimal) / (objectDistance * 2)).toFixed(2);
-  }
+  // Calculate values if missing
+  // ...
 
-  if (!calculatedIso && aperture && shutterSpeedDenominator && objectDistance) {
-    const shutterSpeedDecimal = 1 / shutterSpeedDenominator;
-    calculatedIso = (aperture * aperture * 2 * objectDistance) / shutterSpeedDecimal;
-  }
-
-  if (!calculatedObjectDistance && aperture && iso && shutterSpeedDenominator) {
-    const shutterSpeedDecimal = 1 / shutterSpeedDenominator;
-    calculatedObjectDistance = (iso * shutterSpeedDecimal) / (aperture * aperture * 2);
+  // Check if calculated values match provided values
+  if (
+    (calculatedAperture && calculatedAperture !== aperture) ||
+    (calculatedIso && calculatedIso !== iso) ||
+    (calculatedObjectDistance && calculatedObjectDistance !== objectDistance)
+  ) {
+    bgColor = 'bg-red'; // Set background color to red
   }
 
   return (
-    <div>
+    <div className={`results-container ${bgColor}`}>
       <h2>Results</h2>
       <p>Object Distance: {calculatedObjectDistance} feet</p>
       <p>ISO: {calculatedIso}</p>
-      <p>Shutter Speed: 1/{shutterSpeedDenominator} seconds</p>
+      <p>Shutter Speed: 1/{shutterSpeedDenominator} </p>
       <p>Calculated Aperture: {calculatedAperture === aperture ? `f/${calculatedAperture}` : 'N/A'}</p>
     </div>
   );

@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Results from './Results';
 
 const CameraBody = () => {
-  const [objectDistance, setObjectDistance] = useState(0);
-  const [iso, setIso] = useState(100);
+  const [objectDistance, setObjectDistance] = useState(20);
+  const [iso, setIso] = useState(1600);
   const [shutterSpeedDenominator, setShutterSpeedDenominator] = useState(500); // Default to 1/500
   const [aperture, setAperture] = useState(0);
+
+  // Array of standard ISO values
+  const standardIsoValues = [100, 200, 400, 800, 1600, 3200, 6400, 12800, 25600];
 
   // Handle input changes
   const handleObjectDistanceChange = (event) => {
@@ -36,7 +39,11 @@ const CameraBody = () => {
     if (aperture && shutterSpeedDenominator && objectDistance) {
       if (!iso) {
         const calculatedIso = (shutterSpeedDenominator * objectDistance) / (aperture * aperture * 2);
-        setIso(calculatedIso);
+        // Round calculatedIso to the nearest standard ISO value
+        const roundedIso = standardIsoValues.reduce((prev, curr) =>
+          Math.abs(curr - calculatedIso) < Math.abs(prev - calculatedIso) ? curr : prev
+        );
+        setIso(roundedIso);
       }
     }
     if (iso && shutterSpeedDenominator && objectDistance) {
