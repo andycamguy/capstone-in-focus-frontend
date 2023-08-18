@@ -2,17 +2,14 @@ import React, { useState, useEffect } from 'react';
 import Results from './Results';
 
 const CameraBody = () => {
-  const [objectDistance, setObjectDistance] = useState(20);
-  const [iso, setIso] = useState(1600);
+  const [objectDistanceFeet, setObjectDistanceFeet] = useState(0);
+  const [iso, setIso] = useState(100);
   const [shutterSpeedDenominator, setShutterSpeedDenominator] = useState(500); // Default to 1/500
   const [aperture, setAperture] = useState(0);
 
-  // Array of standard ISO values
-  const standardIsoValues = [100, 200, 400, 800, 1600, 3200, 6400, 12800, 25600];
-
   // Handle input changes
   const handleObjectDistanceChange = (event) => {
-    setObjectDistance(parseFloat(event.target.value));
+    setObjectDistanceFeet(parseFloat(event.target.value));
   };
 
   const handleIsoChange = (event) => {
@@ -31,28 +28,24 @@ const CameraBody = () => {
   useEffect(() => {
     // Calculate missing inputs based on scenarios
     if (aperture && iso && shutterSpeedDenominator) {
-      if (!objectDistance) {
+      if (!objectDistanceFeet) {
         const calculatedDistance = (iso * aperture * aperture * 2) / (shutterSpeedDenominator);
-        setObjectDistance(calculatedDistance);
+        setObjectDistanceFeet(calculatedDistance);
       }
     }
-    if (aperture && shutterSpeedDenominator && objectDistance) {
+    if (aperture && shutterSpeedDenominator && objectDistanceFeet) {
       if (!iso) {
-        const calculatedIso = (shutterSpeedDenominator * objectDistance) / (aperture * aperture * 2);
-        // Round calculatedIso to the nearest standard ISO value
-        const roundedIso = standardIsoValues.reduce((prev, curr) =>
-          Math.abs(curr - calculatedIso) < Math.abs(prev - calculatedIso) ? curr : prev
-        );
-        setIso(roundedIso);
+        const calculatedIso = (shutterSpeedDenominator * objectDistanceFeet) / (aperture * aperture * 2);
+        setIso(calculatedIso);
       }
     }
-    if (iso && shutterSpeedDenominator && objectDistance) {
+    if (iso && shutterSpeedDenominator && objectDistanceFeet) {
       if (!aperture) {
-        const calculatedAperture = Math.sqrt((iso * shutterSpeedDenominator) / (objectDistance * 2));
+        const calculatedAperture = Math.sqrt((iso * shutterSpeedDenominator) / (objectDistanceFeet * 2));
         setAperture(calculatedAperture);
       }
     }
-  }, [iso, aperture, objectDistance, shutterSpeedDenominator]);
+  }, [iso, aperture, objectDistanceFeet, shutterSpeedDenominator]);
 
   return (
     <div>
@@ -63,7 +56,7 @@ const CameraBody = () => {
           type="number"
           id="objectDistance"
           className="form-control"
-          value={objectDistance}
+          value={objectDistanceFeet}
           onChange={handleObjectDistanceChange}
           placeholder="Object Distance"
         />
@@ -102,7 +95,7 @@ const CameraBody = () => {
         />
       </div>
       <Results
-        objectDistance={objectDistance}
+        objectDistanceFeet={objectDistanceFeet}
         iso={iso}
         aperture={aperture}
         shutterSpeedDenominator={shutterSpeedDenominator}
