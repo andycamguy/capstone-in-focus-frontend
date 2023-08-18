@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+// CameraBody.js
+import React, { useState } from 'react';
 import Results from './Results';
 
 const CameraBody = () => {
-  const [objectDistanceFeet, setObjectDistanceFeet] = useState(0);
-  const [iso, setIso] = useState(100);
+  const [objectDistanceFeet, setObjectDistanceFeet] = useState(20);
+  const [iso, setIso] = useState(1600);
   const [shutterSpeedDenominator, setShutterSpeedDenominator] = useState(500); // Default to 1/500
   const [aperture, setAperture] = useState(0);
 
-  // Handle input changes
   const handleObjectDistanceChange = (event) => {
     setObjectDistanceFeet(parseFloat(event.target.value));
   };
@@ -23,29 +23,6 @@ const CameraBody = () => {
   const handleApertureChange = (event) => {
     setAperture(parseFloat(event.target.value));
   };
-
-  // Calculate missing inputs based on available inputs
-  useEffect(() => {
-    // Calculate missing inputs based on scenarios
-    if (aperture && iso && shutterSpeedDenominator) {
-      if (!objectDistanceFeet) {
-        const calculatedDistance = (iso * aperture * aperture * 2) / (shutterSpeedDenominator);
-        setObjectDistanceFeet(calculatedDistance);
-      }
-    }
-    if (aperture && shutterSpeedDenominator && objectDistanceFeet) {
-      if (!iso) {
-        const calculatedIso = (shutterSpeedDenominator * objectDistanceFeet) / (aperture * aperture * 2);
-        setIso(calculatedIso);
-      }
-    }
-    if (iso && shutterSpeedDenominator && objectDistanceFeet) {
-      if (!aperture) {
-        const calculatedAperture = Math.sqrt((iso * shutterSpeedDenominator) / (objectDistanceFeet * 2));
-        setAperture(calculatedAperture);
-      }
-    }
-  }, [iso, aperture, objectDistanceFeet, shutterSpeedDenominator]);
 
   return (
     <div>
@@ -95,7 +72,7 @@ const CameraBody = () => {
         />
       </div>
       <Results
-        objectDistanceFeet={objectDistanceFeet}
+        objectDistanceMillimeters={objectDistanceFeet * 304.8} // Convert feet to millimeters
         iso={iso}
         aperture={aperture}
         shutterSpeedDenominator={shutterSpeedDenominator}
