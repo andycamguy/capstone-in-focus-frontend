@@ -1,5 +1,5 @@
-// CameraBody.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { calculateAperture } from './helpers';
 import Results from './Results';
 
 const CameraBody = () => {
@@ -23,6 +23,19 @@ const CameraBody = () => {
   const handleApertureChange = (event) => {
     setAperture(parseFloat(event.target.value));
   };
+
+  useEffect(() => {
+    if (!aperture && iso && shutterSpeedDenominator && objectDistanceFeet) {
+      const calculatedAperture = calculateAperture(iso, shutterSpeedDenominator, objectDistanceFeet * 304.8);
+      setAperture(calculatedAperture);
+    } else if (aperture && !objectDistanceFeet && iso && shutterSpeedDenominator) {
+      const calculatedDistance = (iso * aperture * aperture * 2) / (shutterSpeedDenominator);
+      setObjectDistanceFeet(calculatedDistance / 304.8);
+    } else if (!iso && aperture && shutterSpeedDenominator && objectDistanceFeet) {
+      const calculatedIso = (shutterSpeedDenominator * objectDistanceFeet) / (aperture * aperture * 2);
+      setIso(calculatedIso);
+    }
+  }, [iso, aperture, objectDistanceFeet, shutterSpeedDenominator]);
 
   return (
     <div>
