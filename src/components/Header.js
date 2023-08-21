@@ -3,15 +3,14 @@ import Link from "next/link";
 import { useGlobalState } from "../context/GlobalState";
 import { useRouter } from "next/navigation";
 
-function Header() {
-  const [state, dispatch] = useGlobalState();
 
+function Header() {
   return (
-    <div>
-        <div>
-        <h1>Header</h1>
-        </div>
-    </div>
+      <div style={{ backgroundColor: '#333', padding: '10px', color: 'white' }}>
+          <div>
+              <h1>Header</h1>
+          </div>
+      </div>
   );
 }
 
