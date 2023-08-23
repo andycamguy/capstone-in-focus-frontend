@@ -31,16 +31,8 @@ const CameraBody = () => {
     setAperture(parseFloat(event.target.value));
   };
 
-  return (
-    <div
-      style={{
-        padding: '20px',
-        borderRadius: '10px',
-        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)',
-        backgroundColor: 'var(--secondary-color)',
-        color: '#59f5f5',
-      }}
-    >
+  const inputFields = (
+    <div style={{ marginBottom: '20px' }}>
       <h1 className="mb-4 text-center text-white">Camera Body</h1>
       <div className="mb-3">
         <label htmlFor="objectDistance" className="form-label">
@@ -94,24 +86,38 @@ const CameraBody = () => {
           placeholder="Aperture"
         />
       </div>
-      <div className="col-md-6">
-          <div
-            style={{
-              float: 'right',
-              marginLeft: '20px', // Add margin for spacing
-              boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)',
-            }}
-          >
-        
-            <Results
-              objectDistanceMillimeters={objectDistanceFeet * 304.8}
-              iso={iso}
-              aperture={aperture}
-              shutterSpeedDenominator={shutterSpeedDenominator}
-            />
-          </div>
     </div>
-    
+  );
+
+  const resultsComponent = (
+    <div
+      style={{
+        float: 'right',
+        marginLeft: '20px', // Add margin for spacing
+        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)',
+      }}
+    >
+      <Results
+        objectDistanceMillimeters={objectDistanceFeet * 304.8}
+        iso={iso}
+        aperture={aperture}
+        shutterSpeedDenominator={shutterSpeedDenominator}
+      />
+    </div>
+  );
+
+  return (
+    <div
+      style={{
+        padding: '20px',
+        borderRadius: '10px',
+       
+        backgroundColor: 'var(--secondary-color)',
+        color: '#59f5f5',
+      }}
+    >
+      {inputFields}
+      {resultsComponent}
     </div>
   );
 };
