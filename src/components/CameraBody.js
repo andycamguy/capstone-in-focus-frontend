@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Results from './Results';
-import {
-  calculateAperture,
-  calculateISO,
-  calculateShutterSpeedDenominator,
-  calculateObjectDistanceMillimeters,
-} from './helpers';
-import { DEFAULT_SERIF_FONT } from 'next/dist/shared/lib/constants';
+
 
 const CameraBody = () => {
   const [objectDistanceFeet, setObjectDistanceFeet] = useState(20);
@@ -86,6 +80,13 @@ const CameraBody = () => {
           placeholder="Aperture"
         />
       </div>
+      <div style={{ flex: 1 }}>
+      <img
+        src="/workspace/capstone-in-focus-frontend/src/components/dslr.jpeg" // need help tomorrow
+        alt="DSLR Camera"
+        style={{ maxWidth: '100%', height: 'auto' }}
+      />
+    </div>
     </div>
   );
 
@@ -94,7 +95,7 @@ const CameraBody = () => {
       style={{
         float: 'right',
         marginLeft: '20px', // Add margin for spacing
-        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)',
+        boxShadow: '0px 0px 1px rgba(0, 0, 0, 0.5)',
       }}
     >
       <Results
@@ -111,7 +112,7 @@ const CameraBody = () => {
       style={{
         padding: '20px',
         borderRadius: '10px',
-       
+        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)',
         backgroundColor: 'var(--secondary-color)',
         color: '#59f5f5',
       }}

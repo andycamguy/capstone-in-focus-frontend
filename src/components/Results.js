@@ -6,7 +6,7 @@ import {
   calculateObjectDistanceMillimeters,
 } from './helpers';
 
-const Results = ({ objectDistanceMillimeters, iso, shutterSpeedDenominator, aperture }) => {
+const Results = ({ objectDistanceMillimeters, iso, shutterSpeedDenominator, aperture, onSaveResults }) => {
   // Calculate missing values using helper functions if needed
   const calculatedAperture = aperture || calculateAperture(iso, shutterSpeedDenominator, objectDistanceMillimeters);
   const calculatedISO = iso || calculateISO(shutterSpeedDenominator, calculatedAperture, objectDistanceMillimeters);
@@ -24,6 +24,16 @@ const Results = ({ objectDistanceMillimeters, iso, shutterSpeedDenominator, aper
     return Math.abs(curr - calculatedAperture) < Math.abs(prev - calculatedAperture) ? curr : prev;
   });
 
+  const handleSaveResults = () => {
+    const results = {
+      objectDistanceMillimeters,
+      iso: calculatedISO,
+      shutterSpeedDenominator: calculatedShutterSpeedDenominator,
+      aperture: nearestAperture,
+    };
+    onSaveResults(results); // Call the provided onSaveResults function
+  };
+
   return (
     <div className="results-container">
       <h2>Results</h2>
@@ -31,6 +41,7 @@ const Results = ({ objectDistanceMillimeters, iso, shutterSpeedDenominator, aper
       <p>ISO: {calculatedISO}</p>
       <p>Shutter Speed: 1/{calculatedShutterSpeedDenominator} seconds</p>
       <p>Aperture: f/{nearestAperture.toFixed(1)}</p>
+      <button onClick={handleSaveResults}>Save Results</button>
     </div>
   );
 };
