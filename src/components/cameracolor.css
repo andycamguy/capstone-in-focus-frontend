@@ -1,0 +1,12 @@
+/* Apply secondary background color to header and footer */
+.header, .footer {
+  background-color: var(--secondary-color);
+  color: #59f5f5; /* Set text color for better visibility */
+}
+
+/* Apply custom styles to camera body container */
+.camera-body-container {
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
