@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Results from './Results';
-
-
+import dslrImage from './dslr.jpeg'
+const BASE_URL = "https://8000-andycamguy-capstoneproj-jkszkagta35.ws-us104.gitpod.io/api/"
 const CameraBody = () => {
   const [objectDistanceFeet, setObjectDistanceFeet] = useState(20);
   const [iso, setIso] = useState(1600);
@@ -26,7 +26,18 @@ const CameraBody = () => {
   };
 
   const inputFields = (
-    <div style={{ marginBottom: '20px' }}>
+    <div
+      style={{
+        padding: '20px',
+      
+        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)',
+        backgroundColor: 'var(--secondary-color)',
+        color: '#59f5f5',
+        background: '#333', // Dark grey background color
+        display: 'flex', // Add display flex
+      }}
+    >
+    
       <h1 className="mb-4 text-center text-white">Camera Body</h1>
       <div className="mb-3">
         <label htmlFor="objectDistance" className="form-label">
@@ -81,11 +92,9 @@ const CameraBody = () => {
         />
       </div>
       <div style={{ flex: 1 }}>
-      <img
-        src="/workspace/capstone-in-focus-frontend/src/components/dslr.jpeg" // need help tomorrow
-        alt="DSLR Camera"
-        style={{ maxWidth: '100%', height: 'auto' }}
-      />
+      <div style={{ flex: 1, maxWidth: '50%', marginRight: '20px' }}>
+      <img src={dslrImage} alt="DSLR Camera" className="img-fluid" />
+    </div>
     </div>
     </div>
   );

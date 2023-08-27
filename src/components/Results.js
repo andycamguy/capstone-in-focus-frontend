@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   calculateAperture,
   calculateISO,
@@ -23,6 +23,18 @@ const Results = ({ objectDistanceMillimeters, iso, shutterSpeedDenominator, aper
   const nearestAperture = standardFstops.reduce((prev, curr) => {
     return Math.abs(curr - calculatedAperture) < Math.abs(prev - calculatedAperture) ? curr : prev;
   });
+  const [loggedIn, setLoggedIn] = useState(false);
+  useEffect(() => {
+    // Check if user is logged in by looking for a valid JWT token in local storage
+    const token = localStorage.getItem('jwt_token');
+
+    if (token) {
+      // Here you can also validate the token by sending a request to the server
+      // to verify its validity. If the token is valid, setLoggedIn(true).
+      // For this example, we'll simply setLoggedIn(true) assuming the token is valid.
+      setLoggedIn(true);
+    }
+  }, []);
 
   // Determine if numbers match up
   const numbersMatch =
@@ -48,6 +60,31 @@ const Results = ({ objectDistanceMillimeters, iso, shutterSpeedDenominator, aper
     textAlign: 'center',
   };
 
+  const handleSaveClick = () => {
+    if (loggedIn) {
+      // Make an API call to save the results data
+      const resultsData = {
+        objectDistanceMillimeters,
+        iso: calculatedISO,
+        shutterSpeedDenominator: calculatedShutterSpeedDenominator,
+        aperture: nearestAperture,
+      };
+
+      axios.post('/api/save-results/', resultsData)
+        .then(response => {
+          // Handle successful API response here
+          console.log('Results saved successfully:', response.data);
+        })
+        .catch(error => {
+          // Handle API error here
+          console.error('Error saving results:', error);
+        });
+    } else {
+      // Display a message for non-logged in users
+      alert('This is a user-only function. Please log in to save results.');
+    }
+  };
+
   return (
     <div style={containerStyle}>
       <h2>Results</h2>
@@ -56,6 +93,7 @@ const Results = ({ objectDistanceMillimeters, iso, shutterSpeedDenominator, aper
       <p>Shutter Speed: 1/{calculatedShutterSpeedDenominator} seconds</p>
       <p>Aperture: f/{nearestAperture.toFixed(1)}</p>
       {inputsValid ? <p>Inputs Valid</p> : <p>Invalid Inputs</p>}
+      <button onClick={handleSaveClick}>Save Results</button>
     </div>
   );
 };
