@@ -14,7 +14,9 @@ const Results = ({ objectDistanceFeet, iso, shutterSpeedDenominator, aperture })
   });
 
   const nearestISO = standardISOs.reduce((prev, curr) => {
-    return Math.abs(curr - calculatedISO) < Math.abs(prev - calculatedISO) ? curr : prev;
+    const prevDiff = Math.abs(prev - calculatedISO);
+    const currDiff = Math.abs(curr - calculatedISO);
+    return currDiff < prevDiff ? curr : prev;
   });
 
   const calculatedShutterSpeedDecimal = 1 / shutterSpeedDenominator;
