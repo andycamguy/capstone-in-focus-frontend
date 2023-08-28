@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import CameraBody from '../../components/CameraBody';
 import axios from 'axios';
+import Results from '../../components/Results';
 
 export default function Page() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -39,25 +40,56 @@ export default function Page() {
       console.error('Logout error:', error);
     }
   };
+  const containerStyle = {
+    backgroundColor: 'cyan',
+    padding: '20px',
+    display: 'flex',
+    flexDirection: 'column', // Stack children vertically
+    alignItems: 'flex-end', // Align children to the right side
+    minHeight: '100vh',     // Minimum height of viewport
+  };
+
+  const headerStyle = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '20px',
+  };
+
+  const resultsComponentStyle = {
+    boxShadow: '0px 0px 1px rgba(0, 0, 0, 0.5)',
+    marginTop: 'auto', // Push Results component to the bottom
+  };
 
   return (
-    <div>
-      <h1 className="mb-4">Project In-Focus</h1>
-      <div className="mb-3">
-        <Link href="/">Documentation</Link>
-      </div>
-      <div className="mb-3">
-        <Link href="/about">Teach me more</Link>
-      </div>
-      {loggedIn ? (
-        <button onClick={handleLogout}>Log Out</button>
-      ) : (
+    <div style={containerStyle}>
+      <div style={headerStyle}>
+        <h1 style={{ color: 'black' }}>Project In-Focus</h1>
         <div>
-          <Link href="/register">Sign Up</Link>
-          <button onClick={handleLogin}>Log In</button>
+          {loggedIn ? (
+            <button onClick={handleLogout}>Log Out</button>
+          ) : (
+            <div>
+              <Link href="/register" style={{ color: 'white', textDecoration: 'none' }}>
+                Sign Up
+              </Link>
+              <button onClick={handleLogin} style={{ marginLeft: '10px' }}>
+                Log In
+              </button>
+            </div>
+          )}
         </div>
-      )}
+      </div>
+      <div>
+        <Link href="/about" style={{ color: 'black', textDecoration: 'none' }}>
+          Documentation
+        </Link>
+      </div>
       <CameraBody loggedIn={loggedIn} />
+      <div style={resultsComponentStyle}>
+        {/* Pass the necessary props to the Results component */}
+        
+      </div>
     </div>
   );
 }

@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import dslrImage from '/workspace/capstone-in-focus-frontend/src/components/dslr.jpeg';
 import Results from './Results';
-
-
-const CameraBody = () => {
+const CameraBody = ({ loggedIn }) => {
   const [objectDistanceFeet, setObjectDistanceFeet] = useState(20);
   const [iso, setIso] = useState(1600);
-  const [shutterSpeedDenominator, setShutterSpeedDenominator] = useState(500); // Default to 1/500
+  const [shutterSpeedDenominator, setShutterSpeedDenominator] = useState(500);
   const [aperture, setAperture] = useState(0);
 
-  // Handle input changes
   const handleObjectDistanceChange = (event) => {
     setObjectDistanceFeet(parseFloat(event.target.value));
   };
@@ -25,8 +23,14 @@ const CameraBody = () => {
     setAperture(parseFloat(event.target.value));
   };
 
+  const imageStyle = {
+    flex: 1,
+    maxWidth: '50%',
+    marginRight: '20px',
+  };
+
   const inputFields = (
-    <div style={{ marginBottom: '20px' }}>
+    <div style={{ padding: '20px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)', backgroundColor: 'var(--secondary-color)', color: '#59f5f5', background: '#333', display: 'flex' }}>
       <h1 className="mb-4 text-center text-white">Camera Body</h1>
       <div className="mb-3">
         <label htmlFor="objectDistance" className="form-label">
@@ -52,7 +56,13 @@ const CameraBody = () => {
           value={iso}
           onChange={handleIsoChange}
           placeholder="ISO"
+          list="isoSuggestions"
         />
+        <datalist id="isoSuggestions">
+          {[100, 200, 400, 800, 1600, 3200, 6400].map((isoValue, index) => (
+            <option key={index} value={isoValue} />
+          ))}
+        </datalist>
       </div>
       <div className="mb-3">
         <label htmlFor="shutterSpeedDenominator" className="form-label">
@@ -78,49 +88,33 @@ const CameraBody = () => {
           value={aperture}
           onChange={handleApertureChange}
           placeholder="Aperture"
+          list="apertureSuggestions"
         />
+        <datalist id="apertureSuggestions">
+          {[1.4, 2, 2.8, 4, 5.6, 8, 11, 16, 22].map((fStop, index) => (
+            <option key={index} value={fStop} />
+          ))}
+        </datalist>
       </div>
-      <div style={{ flex: 1 }}>
-      <img
-        src="/workspace/capstone-in-focus-frontend/src/components/dslr.jpeg" // need help tomorrow
-        alt="DSLR Camera"
-        style={{ maxWidth: '100%', height: 'auto' }}
-      />
-    </div>
-    </div>
-  );
-
-  const resultsComponent = (
-    <div
-      style={{
-        float: 'right',
-        marginLeft: '20px', // Add margin for spacing
-        boxShadow: '0px 0px 1px rgba(0, 0, 0, 0.5)',
-      }}
-    >
-      <Results
-        objectDistanceMillimeters={objectDistanceFeet * 304.8}
-        iso={iso}
-        aperture={aperture}
-        shutterSpeedDenominator={shutterSpeedDenominator}
-      />
+      <div style={{ flex: 1, maxWidth: '50%', marginRight: '20px' }}>
+        <img src={dslrImage} alt="DSLR Camera" className="img-fluid" />
+      </div>
     </div>
   );
 
   return (
-    <div
-      style={{
-        padding: '20px',
-        borderRadius: '10px',
-        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)',
-        backgroundColor: 'var(--secondary-color)',
-        color: '#59f5f5',
-      }}
-    >
+    <div style={{ padding: '20px', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)', backgroundColor: 'var(--secondary-color)', color: '#59f5f5' }}>
       {inputFields}
-      {resultsComponent}
+      <Results
+        loggedIn={loggedIn}
+        objectDistanceFeet={objectDistanceFeet}
+        iso={iso}
+        shutterSpeedDenominator={shutterSpeedDenominator}
+        aperture={aperture}
+      />
     </div>
   );
 };
+
 
 export default CameraBody;
