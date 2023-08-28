@@ -2,44 +2,44 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import CameraBody from '../../components/CameraBody';
 import axios from 'axios';
-import Results from '../../components/Results';
 
 export default function Page() {
   const [loggedIn, setLoggedIn] = useState(false);
 
-  const handleLogin = async () => {
-    try {
-      // Make API call to your backend for authentication using Axios
-      const response = await axios.post('/api/login', {
-        // Add necessary user credentials in the request body
-        email: 'user@example.com',
-        password: 'password123',
-      });
+  // const handleLogin = async () => {
+  //   try {
+  //     // Make API call to your backend for authentication using Axios
+  //     const response = await axios.post('/api/login', {
+  //       // Add necessary user credentials in the request body
+  //       email: 'user@example.com',
+  //       password: 'password123',
+  //     });
 
-      if (response.status === 200) {
-        setLoggedIn(true); // Update login status
-      } else {
-        // Handle login error
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-    }
-  };
+  //     if (response.status === 200) {
+  //       setLoggedIn(true); // Update login status
+  //     } else {
+  //       // Handle login error
+  //     }
+  //   } catch (error) {
+  //     console.error('Login error:', error);
+  //   }
+  // };
 
-  const handleLogout = async () => {
-    try {
-      // Make API call to log out using Axios
-      const response = await axios.post('/api/logout');
+  // const handleLogout = async () => {
+  //   try {
+  //     // Make API call to log out using Axios
+  //     const response = await axios.post('/api/logout');
 
-      if (response.status === 200) {
-        setLoggedIn(false); // Update login status
-      } else {
-        // Handle logout error
-      }
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
-  };
+  //     if (response.status === 200) {
+  //       setLoggedIn(false); // Update login status
+  //     } else {
+  //       // Handle logout error
+  //     }
+  //   } catch (error) {
+  //     console.error('Logout error:', error);
+  //   }
+  // };
+  
   const containerStyle = {
     backgroundColor: 'cyan',
     padding: '20px',
@@ -73,9 +73,7 @@ export default function Page() {
               <Link href="/register" style={{ color: 'white', textDecoration: 'none' }}>
                 Sign Up
               </Link>
-              <button onClick={handleLogin} style={{ marginLeft: '10px' }}>
-                Log In
-              </button>
+              <Link href="/register">Register</Link>
             </div>
           )}
         </div>

@@ -3,10 +3,9 @@ import Link from 'next/link';
 
 const About = () => {
   return (
-    <div>
-      <h1>About</h1>
-      <Link href="/dashboard">Dashboard</Link>
-      <Link href="/">Home</Link>
+    <div style={{ backgroundColor: 'cyan', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)', padding: '20px', borderRadius: '10px' }}>
+    <h1>About</h1>
+    <Link href="/dashboard">Calculator</Link>
       <div>
         <h2>Project In-Focus: Understanding Camera Settings and Focal Length</h2>
         <p>
@@ -53,10 +52,7 @@ const About = () => {
           Feel free to refer to this documentation whenever you need assistance, and remember to experiment with different settings to unleash your creative potential.
           Happy shooting!
         </p>
-        <div>
-          <a href="link-to-your-documentation-page">Explore the Documentation</a>
-          <a href="https://en.wikipedia.org/wiki/Focal_length" target="_blank" rel="noopener noreferrer">Learn More about Focal Length</a>
-        </div>
+        
       </div>
     </div>
   );
