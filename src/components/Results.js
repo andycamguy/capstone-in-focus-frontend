@@ -1,99 +1,59 @@
 import React, { useState, useEffect } from 'react';
-import {
-  calculateAperture,
-  calculateISO,
-  calculateShutterSpeedDenominator,
-  calculateObjectDistanceMillimeters,
-} from './helpers';
+import { calculateAperture, calculateISO, calculateShutterSpeedDenominator, calculateObjectDistanceMillimeters } from './helpers';
 
-const Results = ({ objectDistanceMillimeters, iso, shutterSpeedDenominator, aperture }) => {
-  // Calculate missing values using helper functions if needed
-  const calculatedAperture = aperture || calculateAperture(iso, shutterSpeedDenominator, objectDistanceMillimeters);
-  const calculatedISO = iso || calculateISO(shutterSpeedDenominator, calculatedAperture, objectDistanceMillimeters);
-  const calculatedShutterSpeedDenominator =
-    shutterSpeedDenominator || calculateShutterSpeedDenominator(calculatedISO, calculatedAperture, objectDistanceMillimeters);
-  const calculatedObjectDistanceMillimeters =
-    objectDistanceMillimeters ||
-    calculateObjectDistanceMillimeters(calculatedISO, calculatedShutterSpeedDenominator, calculatedAperture);
+const Results = ({ objectDistanceFeet, iso, shutterSpeedDenominator, aperture }) => {
+  const objectDistanceMillimeters = objectDistanceFeet * 304.8; // Convert feet to millimeters
+  const calculatedAperture = calculateAperture(iso, shutterSpeedDenominator, objectDistanceMillimeters);
+  const calculatedISO = calculateISO(shutterSpeedDenominator, calculatedAperture, objectDistanceMillimeters);
 
-  // Array of standard f-stops
   const standardFstops = [1.4, 2, 2.8, 4, 5.6, 8, 11, 16, 22];
+  const standardISOs = [100, 200, 400, 800, 1600, 3200, 6400];
 
-  // Find the nearest standard f-stop value
   const nearestAperture = standardFstops.reduce((prev, curr) => {
     return Math.abs(curr - calculatedAperture) < Math.abs(prev - calculatedAperture) ? curr : prev;
   });
-  const [loggedIn, setLoggedIn] = useState(false);
-  useEffect(() => {
-    // Check if user is logged in by looking for a valid JWT token in local storage
-    const token = localStorage.getItem('jwt_token');
 
-    if (token) {
-      // Here you can also validate the token by sending a request to the server
-      // to verify its validity. If the token is valid, setLoggedIn(true).
-      // For this example, we'll simply setLoggedIn(true) assuming the token is valid.
-      setLoggedIn(true);
-    }
-  }, []);
+  const nearestISO = standardISOs.reduce((prev, curr) => {
+    return Math.abs(curr - calculatedISO) < Math.abs(prev - calculatedISO) ? curr : prev;
+  });
 
-  // Determine if numbers match up
-  const numbersMatch =
-    Math.abs(calculatedObjectDistanceMillimeters - objectDistanceMillimeters) < 0.01 &&
-    Math.abs(calculatedISO - iso) < 1 &&
-    Math.abs(calculatedShutterSpeedDenominator - shutterSpeedDenominator) < 1 &&
-    Math.abs(nearestAperture - aperture) < 0.1;
+  const calculatedShutterSpeedDecimal = 1 / shutterSpeedDenominator;
 
-  // Determine if inputs are valid
-  const inputsValid =
-    !isNaN(objectDistanceMillimeters) &&
-    !isNaN(iso) &&
-    !isNaN(shutterSpeedDenominator) &&
-    !isNaN(aperture);
+  const calculatedShutterSpeedNumerator = Math.round(1 / (calculatedShutterSpeedDecimal * 2));
+  const calculatedShutterSpeedDenominator = 2;
 
-  // Apply conditional styles
   const containerStyle = {
-    backgroundColor: numbersMatch && inputsValid ? 'green' : 'red',
+    backgroundColor: objectDistanceMillimeters > 0 && iso > 0 && shutterSpeedDenominator > 0 && aperture > 0 ? 'green' : 'red',
     padding: '10px',
     borderRadius: '5px',
     boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.5)',
     color: 'white',
     textAlign: 'center',
+    float: 'right',
   };
 
-  const handleSaveClick = () => {
-    if (loggedIn) {
-      // Make an API call to save the results data
-      const resultsData = {
-        objectDistanceMillimeters,
-        iso: calculatedISO,
-        shutterSpeedDenominator: calculatedShutterSpeedDenominator,
-        aperture: nearestAperture,
-      };
+  const formatShutterSpeed = () => {
+    const shutterSpeed = `1/${calculatedShutterSpeedNumerator} seconds`;
+    return shutterSpeed;
+  };
 
-      axios.post('/api/save-results/', resultsData)
-        .then(response => {
-          // Handle successful API response here
-          console.log('Results saved successfully:', response.data);
-        })
-        .catch(error => {
-          // Handle API error here
-          console.error('Error saving results:', error);
-        });
-    } else {
-      // Display a message for non-logged in users
-      alert('This is a user-only function. Please log in to save results.');
-    }
+  const formatISO = () => {
+    const formattedISO = new Intl.NumberFormat().format(nearestISO);
+    return formattedISO;
   };
 
   return (
     <div style={containerStyle}>
       <h2>Results</h2>
-      <p>Object Distance: {calculatedObjectDistanceMillimeters.toFixed(2)} millimeters</p>
-      <p>ISO: {calculatedISO}</p>
-      <p>Shutter Speed: 1/{calculatedShutterSpeedDenominator} seconds</p>
+      <p>Object Distance: {objectDistanceMillimeters.toFixed(2)} millimeters</p>
+      <p>ISO: {formatISO()}</p>
+      <p>Shutter Speed: {formatShutterSpeed()}</p>
       <p>Aperture: f/{nearestAperture.toFixed(1)}</p>
-      {inputsValid ? <p>Inputs Valid</p> : <p>Invalid Inputs</p>}
-      <button onClick={handleSaveClick}>Save Results</button>
+      {objectDistanceMillimeters > 0 && iso > 0 && shutterSpeedDenominator > 0 && aperture > 0 ? (
+        <p>Inputs Valid</p>
+      ) : (
+        <p>Invalid Inputs</p>
+      )}
     </div>
   );
 };

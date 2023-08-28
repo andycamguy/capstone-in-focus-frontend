@@ -1,0 +1,9 @@
+/* Apply cyan color to the header */
+.header {
+  background-color: cyan;
+}
+
+/* Apply black color to the background */
+body {
+  background-color: black;
+}
